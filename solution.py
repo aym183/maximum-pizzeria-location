@@ -12,3 +12,15 @@ class Pizzeria:
             self.city_dimension.append(sub_dimension)
 
 
+if __name__ == "__main__":
+    
+    first_input = input()
+    first_input = first_input.split(" ")
+    pizzeria_specs = []
+    for i in range (int(first_input[1])):
+        pizzeria_inputs = input(" ")
+        pizzeria_specs.append(pizzeria_inputs.split(" "))
+
+    create_class = Pizzeria(int(first_input[0]), int(first_input[1]), pizzeria_specs)
+    create_class.set_city_dimensions()
+    print(create_class.city_dimension)
