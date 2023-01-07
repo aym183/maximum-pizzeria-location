@@ -1,35 +1,40 @@
 import threading
 from time import sleep
+import numpy as np
+''' DO ERROR HANDLING AND UNIT TESTS '''
 class Pizzeria:
     def __init__(self, dimensions_input, possible_moves, pizzeria_specs):
         self.dimensions_input = dimensions_input
         self.possible_moves = possible_moves
         self.pizzeria_specs = pizzeria_specs
-        self.city_dimension = list([])
+        self.city_dimension = []
         self.max_pizzerias = 0
 
     def set_city_dimensions(self):
         sub_dimension = [0]*self.dimensions_input
         for idx in range(self.dimensions_input):
-            self.city_dimension.append(sub_dimension)
-        return self.city_dimension
+            self.city_dimension.append(list(sub_dimension))
 
-    def get_max_pizzerias(self):
+    def implement_delivery_moves(self):
         location_x, location_y = int(self.pizzeria_specs[0]), int(self.pizzeria_specs[1])
         self.possible_moves.append([location_x, location_y])
-        # valid_moves = []
         for idx in range(len(self.possible_moves)):
             try:
-                self.city_dimension[self.possible_moves[idx][0]][self.possible_moves[idx][1]] = 1
+                if ((self.possible_moves[idx][0] >= 0) and (self.possible_moves[idx][0] <= self.dimensions_input - 1)) and ((self.possible_moves[idx][1] >= 0) and (self.possible_moves[idx][1] <= self.dimensions_input - 1)):
+                    self.city_dimension[self.possible_moves[idx][0]][self.possible_moves[idx][1]] += 1
             
             except IndexError:
-                pass   
-        # return 
-            # after_move_x, after_move_y = location_x + self.possible_moves[idx][0], location_y + self.possible_moves[idx][1]
+                pass
+         
+    def get_max_pizzerias(self, implemented_moves):
+        output = np.array(implemented_moves).sum(0).tolist()
+        for idx in range(len(output)):
+            for snd_idx in range(len(output[0])):
+                if output[idx][snd_idx] > self.max_pizzerias:
+                    self.max_pizzerias = output[idx][snd_idx]
+        # return self.max_pizzerias
 
-            # if ((after_move_x >= 0) and (after_move_x <= self.dimensions_input - 1)) and ((after_move_y >= 0) and (after_move_y <= self.dimensions_input - 1)):
-            # valid_moves.append([after_move_x, after_move_y]) 
-            
+
     
 class PossibleMoves:
     def __init__(self, max_delivery_range, fixed_start_point, var_start_point):
@@ -44,7 +49,7 @@ class PossibleMoves:
             if self.moves_counter != self.max_delivery_range:
                 if split == 'No':
                     self.var_start_point.reverse()
-                
+                    
                 if type == "plus":
                     self.var_start_point[0] += 1
                 elif type == 'subtract':
@@ -82,6 +87,7 @@ class PossibleMoves:
 
 if __name__ == "__main__":
 
+    final_dimension = []
     first_input = input().split(" ")
     pizzeria_specs_input = []
     for i in range (int(first_input[1])):
@@ -105,11 +111,18 @@ if __name__ == "__main__":
         sleep(0.2)
         T5.start()
         sleep(0.2)
-        print(create_class.present_pizz_outputs)
+        # print(create_class.present_pizz_outputs)
         pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
         pizzeria_class.set_city_dimensions()
-        pizzeria_class.get_max_pizzerias()
-        print(pizzeria_class.city_dimension)
+        pizzeria_class.implement_delivery_moves()
+        final_dimension.append(list(pizzeria_class.city_dimension))
+    pizzeria_class.get_max_pizzerias(final_dimension)
+    print(pizzeria_class.max_pizzerias)
+    
+    # for idx in range(1, len(final_dimension)):
+    #     for snd_idx in range(len(final_dimension[0])):
+    #         final_dimension[0][snd_idx]+= final_dimension[idx][snd_idx]
+    # print(final_dimension[0])
 
 
     # create_class.straight_moves("plus", "No")
