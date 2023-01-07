@@ -102,11 +102,11 @@ class PossibleMoves:
 '''
 Contains the main part of the program that:
 (i) Takes the user input and undergo error handling
-(ii) Create the relevant objects, calling relevant methods
-(iii) Call the method to return the final output
+(ii) Creates object for PossibleMoves to get all the locations the delivery guy can go to
+(iii) Taking that, creates object for Pizzeria, where the moves are implemented in the city dimension and the ideal block is found
 '''
-if __name__ == "__main__":
 
+def main():
     final_dimension = []
     first_input = input().strip().split(" ")
     if (len(first_input) == 2) and ((0 <= int(first_input[0]) <= 10000) and (0 <= int(first_input[1]) <= 10000)) and (first_input[1].isdigit() and first_input[0].isdigit()):
@@ -118,10 +118,11 @@ if __name__ == "__main__":
             else:
                 print("Error! Invalid input")
                 exit()
-                
+
         for idx in range(len(pizzeria_specs_input)):
             pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
             create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
+            # Use of multithreading to go through all possible moves delivey guy can make (forward, backward, right, left) without harming core program performance
             T1 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "No"))
             T2 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "Yes"))
             T3 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "Yes"))
@@ -132,7 +133,6 @@ if __name__ == "__main__":
             T3.start()
             T4.start()
             T5.start()
-            print(create_class.present_pizz_outputs)
             pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, pizzeria_spec_decremented)
             pizzeria_class.set_city_dimensions()
             pizzeria_class.implement_delivery_moves()
@@ -142,3 +142,7 @@ if __name__ == "__main__":
     else:
         print("Error! Input limit is 2 and keep within range [0, 10000]")
         exit()
+
+if __name__ == "__main__":
+    main()
+    
