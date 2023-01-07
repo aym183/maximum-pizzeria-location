@@ -1,16 +1,16 @@
 import threading
-from time import sleep
 import numpy as np
-'''
-The Pizzeria class does the following:
-(i) Create the base NxN matrix based on city dimension inputs
-(ii) Implement all the possible blocks the delivery guy can go to
-(iii) Returns the final output
 
-Inputs: dimensions_input (user input to create city matrix), possible_moves (all the blocks delivery guy can move to), pizzeria_specs (user input, contains the location of a pizzeria [x,y])
-Output: self.max_pizzerias (Gets the number of pizzerias that deliver pizzas to the block with the greatest selection of pizzas)
-'''
 class Pizzeria:
+    '''
+    The Pizzeria class does the following:
+    (i) Create the base NxN matrix based on city dimension inputs
+    (ii) Implement all the possible blocks the delivery guy can go to
+    (iii) Returns the final output
+
+    Inputs: dimensions_input (user input to create city matrix), possible_moves (all the blocks delivery guy can move to), pizzeria_specs (user input, contains the location of a pizzeria [x,y])
+    Output: self.max_pizzerias (Gets the number of pizzerias that deliver pizzas to the block with the greatest selection of pizzas)
+    '''
     def __init__(self, dimensions_input, possible_moves, pizzeria_specs):
         self.dimensions_input = dimensions_input
         self.possible_moves = possible_moves
@@ -44,14 +44,15 @@ class Pizzeria:
                     self.max_pizzerias = output[idx][snd_idx]
         return self.max_pizzerias
 
-'''
-The PossibleMoves class does the following:
-It takes the location of a pizzeria and gets all the possible blocks a delivery guy can go to
 
-Inputs: max_delivery_range (user input that shows max distance a delivery guy can travel), fixed_start_point (user input that contains the fixed location of a pizzeria [x,y], var_start_point (user input that contains the same value as fixed_start_point but will be manipulated))
-Output: present_pizz_outputs (Contains all the possible blocks a delivey guy can go to)
-'''
 class PossibleMoves:
+    '''
+    The PossibleMoves class does the following:
+    It takes the location of a pizzeria and gets all the possible blocks a delivery guy can go to
+
+    Inputs: max_delivery_range (user input that shows max distance a delivery guy can travel), fixed_start_point (user input that contains the fixed location of a pizzeria [x,y], var_start_point (user input that contains the same value as fixed_start_point but will be manipulated))
+    Output: present_pizz_outputs (Contains all the possible blocks a delivey guy can go to)
+    '''
     def __init__(self, max_delivery_range, fixed_start_point, var_start_point):
         self.max_delivery_range = max_delivery_range
         self.fixed_start_point = fixed_start_point
@@ -70,7 +71,7 @@ class PossibleMoves:
                     self.var_start_point[0] += 1
                 elif type == 'subtract':
                     self.var_start_point[0] -= 1
-                self.moves_counter+= 1
+                self.moves_counter += 1
 
                 if self.var_start_point not in self.present_pizz_outputs:
                     self.present_pizz_outputs.append(list(self.var_start_point))
@@ -89,7 +90,7 @@ class PossibleMoves:
                     self.var_start_point[0] += 1
                 else:
                     self.var_start_point[0] -= 1
-                self.moves_counter+= 1
+                self.moves_counter += 1
                 if self.var_start_point not in self.present_pizz_outputs:
                     self.present_pizz_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
@@ -105,39 +106,35 @@ Contains the main part of the program that:
 (ii) Creates object for PossibleMoves to get all the locations the delivery guy can go to
 (iii) Taking that, creates object for Pizzeria, where the moves are implemented in the city dimension and the ideal block is found
 '''
-
 def main():
     final_dimension = []
-    first_input = input().strip().split(" ")
-    if (len(first_input) == 2) and ((0 <= int(first_input[0]) <= 10000) and (0 <= int(first_input[1]) <= 10000)) and (first_input[1].isdigit() and first_input[0].isdigit()):
+    # first_input (len(first_input) == 2)
+    [dimensions, no_of_pizzerias] = input().strip().split(" ")
+    if ((0 <= int(dimensions) <= 10000) and (0 <= int(no_of_pizzerias) <= 10000) and (no_of_pizzerias.isdigit() and dimensions.isdigit())):
         pizzeria_specs_input = []
-        for i in range (int(first_input[1])):
-            pizzeria_inputs = input().strip().split(" ")
-            if (len(pizzeria_inputs) == 3 and pizzeria_inputs[0].isdigit() and pizzeria_inputs[1].isdigit() and  pizzeria_inputs[2].isdigit()) and (1 <= int(pizzeria_inputs[0]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[1]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[2]) <= 5000):
-                pizzeria_specs_input.append(pizzeria_inputs)
+        for idx in range (int(no_of_pizzerias)):
+            [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
+            if (pizzeria_location_x.isdigit() and pizzeria_location_y.isdigit() and max_delivery_range.isdigit()) and (1 <= int(pizzeria_location_x) <= int(dimensions)) and (1 <= int(pizzeria_location_y) <= int(dimensions)) and (1 <= int(max_delivery_range) <= 5000):
+                pizzeria_specs_input.append([pizzeria_location_x, pizzeria_location_y, max_delivery_range])
             else:
                 print("Error! Invalid input")
                 exit()
-
+        
         for idx in range(len(pizzeria_specs_input)):
             pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
-            create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
+            possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
             # Use of multithreading to go through all possible moves delivey guy can make (forward, backward, right, left) without harming core program performance
-            T1 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "No"))
-            T2 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "Yes"))
-            T3 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "Yes"))
-            T4 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "No"))
-            T5 =  threading.Thread(target=create_class.split_moves)
-            T1.start()
-            T2.start()
-            T3.start()
-            T4.start()
-            T5.start()
-            pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, pizzeria_spec_decremented)
-            pizzeria_class.set_city_dimensions()
-            pizzeria_class.implement_delivery_moves()
-            final_dimension.append(list(pizzeria_class.city_dimension))
-        print(pizzeria_class.get_max_pizzerias(final_dimension))
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "No")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "Yes")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "Yes")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "No")).start()
+            threading.Thread(target = possible_moves.split_moves).start()
+
+            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizz_outputs, pizzeria_spec_decremented)
+            pizzeria.set_city_dimensions()
+            pizzeria.implement_delivery_moves()
+            final_dimension.append(list(pizzeria.city_dimension))
+        print(pizzeria.get_max_pizzerias(final_dimension))
    
     else:
         print("Error! Input limit is 2 and keep within range [0, 10000]")
