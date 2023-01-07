@@ -2,7 +2,7 @@ import threading
 from time import sleep
 import numpy as np
 '''UNIT TESTS'''
-
+ 
 '''
 The Pizzeria class does the following:
 (i) Create the base NxN matrix based on city dimension inputs
@@ -111,11 +111,11 @@ if __name__ == "__main__":
 
     final_dimension = []
     first_input = input().strip().split(" ")
-    if (len(first_input) == 2) and ((0 <= int(first_input[0]) <= 10000) and (0 <= int(first_input[1]) <= 10000)):
+    if (len(first_input) == 2) and ((0 <= int(first_input[0]) <= 10000) and (0 <= int(first_input[1]) <= 10000)) and (first_input[1].isdigit() and first_input[0].isdigit()):
         pizzeria_specs_input = []
         for i in range (int(first_input[1])):
             pizzeria_inputs = input().strip().split(" ")
-            if (len(pizzeria_inputs) == 3) and (1 <= int(pizzeria_inputs[0]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[1]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[2]) <= 5000):
+            if (len(pizzeria_inputs) == 3 and pizzeria_inputs[0].isdigit() and pizzeria_inputs[1].isdigit() and  pizzeria_inputs[2].isdigit()) and (1 <= int(pizzeria_inputs[0]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[1]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[2]) <= 5000):
                 pizzeria_specs_input.append(pizzeria_inputs)
             else:
                 print("Error! Invalid input")
