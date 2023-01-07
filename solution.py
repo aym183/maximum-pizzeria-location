@@ -114,7 +114,7 @@ def main():
         pizzeria_specs_input = []
         for idx in range (int(no_of_pizzerias)):
             [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
-            if (pizzeria_location_x.isdigit() and pizzeria_location_y.isdigit() and max_delivery_range.isdigit()) and (1 <= int(pizzeria_location_x) <= int(dimensions)) and (1 <= int(pizzeria_location_y) <= int(dimensions)) and (1 <= int(max_delivery_range) <= 5000):
+            if (all(n.isdigit() for n in (pizzeria_location_x, pizzeria_location_y, max_delivery_range))) and (1 <= int(max_delivery_range) <= 5000) and (all(1 <= int(n) <= int(dimensions) for n in (pizzeria_location_x, pizzeria_location_y))):
                 pizzeria_specs_input.append([pizzeria_location_x, pizzeria_location_y, max_delivery_range])
             else:
                 print("Error! Invalid input")
@@ -142,4 +142,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
