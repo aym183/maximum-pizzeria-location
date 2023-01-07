@@ -1,7 +1,7 @@
 import threading
 from time import sleep
 import numpy as np
-''' DO ERROR HANDLING AND UNIT TESTS '''
+''' DO ERROR HANDLING, UNIT TESTS, COMMENTS '''
 class Pizzeria:
     def __init__(self, dimensions_input, possible_moves, pizzeria_specs):
         self.dimensions_input = dimensions_input
@@ -20,7 +20,7 @@ class Pizzeria:
         self.possible_moves.append([location_x, location_y])
         for idx in range(len(self.possible_moves)):
             try:
-                if ((self.possible_moves[idx][0] >= 0) and (self.possible_moves[idx][0] <= self.dimensions_input - 1)) and ((self.possible_moves[idx][1] >= 0) and (self.possible_moves[idx][1] <= self.dimensions_input - 1)):
+                if ((0 <= self.possible_moves[idx][0] <= self.dimensions_input - 1) and (0 <= self.possible_moves[idx][1] <= self.dimensions_input - 1)):
                     self.city_dimension[self.possible_moves[idx][0]][self.possible_moves[idx][1]] += 1
             
             except IndexError:
@@ -88,52 +88,41 @@ class PossibleMoves:
 if __name__ == "__main__":
 
     final_dimension = []
-    first_input = input().split(" ")
-    pizzeria_specs_input = []
-    for i in range (int(first_input[1])):
-        pizzeria_inputs = input(" ").split(" ")
-        pizzeria_specs_input.append(pizzeria_inputs)
-    
-    for idx in range(len(pizzeria_specs_input)):
-        create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
-        T1 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "No"))
-        T2 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "Yes"))
-        T3 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "Yes"))
-        T4 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "No"))
-        T5 =  threading.Thread(target=create_class.split_moves)
-        T1.start()
-        sleep(0.2)
-        T2.start()
-        sleep(0.2)
-        T3.start()
-        sleep(0.2)
-        T4.start()
-        sleep(0.2)
-        T5.start()
-        sleep(0.2)
-        # print(create_class.present_pizz_outputs)
-        pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
-        pizzeria_class.set_city_dimensions()
-        pizzeria_class.implement_delivery_moves()
-        final_dimension.append(list(pizzeria_class.city_dimension))
-    pizzeria_class.get_max_pizzerias(final_dimension)
-    print(pizzeria_class.max_pizzerias)
-    
-    # for idx in range(1, len(final_dimension)):
-    #     for snd_idx in range(len(final_dimension[0])):
-    #         final_dimension[0][snd_idx]+= final_dimension[idx][snd_idx]
-    # print(final_dimension[0])
-
-
-    # create_class.straight_moves("plus", "No")
-    # create_class.straight_moves("plus", "Yes")
-    # create_class.straight_moves("subtract", "Yes")
-    # create_class.straight_moves("subtract", "No")
-    # create_class.split_moves()
-    # print(create_class.outputs)
-
-    # create_pizzeria_class = Pizzeria(int(first_input[0]), int(first_input[1]), pizzeria_specs, create_class.outputs)
-    # create_pizzeria_class.set_city_dimensions()
-    # # print(create_class.city_dimension)
-    # # create_pizzeria_class.set_max_delivery_range(pizzeria_specs[0])
-    # create_pizzeria_class.get_max_pizzerias()
+    first_input = input().strip().split(" ")
+    if (len(first_input) == 2) and ((0 <= int(first_input[0]) <= 10000) and (0 <= int(first_input[1]) <= 10000)):
+        pizzeria_specs_input = []
+        for i in range (int(first_input[1])):
+            pizzeria_inputs = input().strip().split(" ")
+            if (len(pizzeria_inputs) == 3) and (1 <= int(pizzeria_inputs[0]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[1]) <= int(first_input[0])) and (1 <= int(pizzeria_inputs[2]) <= 5000):
+                pizzeria_specs_input.append(pizzeria_inputs)
+            else:
+                print("Error! Invalid input")
+                exit()
+                
+        for idx in range(len(pizzeria_specs_input)):
+            create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            T1 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "No"))
+            T2 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "Yes"))
+            T3 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "Yes"))
+            T4 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "No"))
+            T5 =  threading.Thread(target=create_class.split_moves)
+            T1.start()
+            sleep(0.2)
+            T2.start()
+            sleep(0.2)
+            T3.start()
+            sleep(0.2)
+            T4.start()
+            sleep(0.2)
+            T5.start()
+            sleep(0.2)
+            # print(create_class.present_pizz_outputs)
+            pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            pizzeria_class.set_city_dimensions()
+            pizzeria_class.implement_delivery_moves()
+            final_dimension.append(list(pizzeria_class.city_dimension))
+        pizzeria_class.get_max_pizzerias(final_dimension)
+        print(pizzeria_class.max_pizzerias)
+    else:
+        print("Error! Input limit is 2 and keep within range [0, 10000]")
+        exit()
