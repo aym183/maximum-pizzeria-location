@@ -1,8 +1,6 @@
 import threading
 from time import sleep
 import numpy as np
-'''UNIT TESTS'''
- 
 '''
 The Pizzeria class does the following:
 (i) Create the base NxN matrix based on city dimension inputs
@@ -122,7 +120,8 @@ if __name__ == "__main__":
                 exit()
                 
         for idx in range(len(pizzeria_specs_input)):
-            create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
+            create_class = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
             T1 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "No"))
             T2 =  threading.Thread(target=create_class.straight_moves, args = ("plus", "Yes"))
             T3 =  threading.Thread(target=create_class.straight_moves, args = ("subtract", "Yes"))
@@ -133,7 +132,8 @@ if __name__ == "__main__":
             T3.start()
             T4.start()
             T5.start()
-            pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            print(create_class.present_pizz_outputs)
+            pizzeria_class = Pizzeria(int(first_input[0]), create_class.present_pizz_outputs, pizzeria_spec_decremented)
             pizzeria_class.set_city_dimensions()
             pizzeria_class.implement_delivery_moves()
             final_dimension.append(list(pizzeria_class.city_dimension))
