@@ -57,14 +57,14 @@ class PossibleMoves:
         self.max_delivery_range = max_delivery_range
         self.fixed_start_point = fixed_start_point
         self.var_start_point = var_start_point
-        self.present_pizz_outputs = []
+        self.present_pizzeria_outputs = []
         self.moves_counter = 0
 
     # The function implements all the straight blocks a delivery guy can move to. It stores all the reverse outputs as its more efficient than doing calculations again
     def straight_moves(self, type, split):
-        for i in range(1, self.max_delivery_range+1):
+        for idx in range(1, self.max_delivery_range+1):
             if self.moves_counter != self.max_delivery_range:
-                if split == 'No':
+                if split == True:
                     self.var_start_point.reverse()
                     
                 if type == "plus":
@@ -73,40 +73,40 @@ class PossibleMoves:
                     self.var_start_point[0] -= 1
                 self.moves_counter += 1
 
-                if self.var_start_point not in self.present_pizz_outputs:
-                    self.present_pizz_outputs.append(list(self.var_start_point))
+                if self.var_start_point not in self.present_pizzeria_outputs:
+                    self.present_pizzeria_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
-                if self.var_start_point not in self.present_pizz_outputs:
-                    self.present_pizz_outputs.append(list(self.var_start_point))
+                if self.var_start_point not in self.present_pizzeria_outputs:
+                    self.present_pizzeria_outputs.append(list(self.var_start_point))
        
         self.moves_counter = 0
         self.var_start_point= list(self.fixed_start_point)
     
     # The function implements the non straight blocks that a delivery guy can move to, for example, going straight and right.
     def split_moves(self):
-        for i in range(1, self.max_delivery_range+1):
+        for idx in range(1, self.max_delivery_range+1):
             if self.moves_counter != self.max_delivery_range:
-                if i%2 == 1:
+                if idx%2 == 1:
                     self.var_start_point[0] += 1
                 else:
                     self.var_start_point[0] -= 1
                 self.moves_counter += 1
-                if self.var_start_point not in self.present_pizz_outputs:
-                    self.present_pizz_outputs.append(list(self.var_start_point))
+                if self.var_start_point not in self.present_pizzeria_outputs:
+                    self.present_pizzeria_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
-                if self.var_start_point not in self.present_pizz_outputs:
-                    self.present_pizz_outputs.append(list(self.var_start_point))
+                if self.var_start_point not in self.present_pizzeria_outputs:
+                    self.present_pizzeria_outputs.append(list(self.var_start_point))
 
         self.moves_counter = 0    
         self.var_start_point= list(self.fixed_start_point)
 
-'''
-Contains the main part of the program that:
-(i) Takes the user input and undergo error handling
-(ii) Creates object for PossibleMoves to get all the locations the delivery guy can go to
-(iii) Taking that, creates object for Pizzeria, where the moves are implemented in the city dimension and the ideal block is found
-'''
 def main():
+    '''
+    Contains the main part of the program that:
+    (i) Takes the user input and undergo error handling
+    (ii) Creates object for PossibleMoves to get all the locations the delivery guy can go to
+    (iii) Taking that, creates object for Pizzeria, where the moves are implemented in the city dimension and the ideal block is found
+    '''
     final_dimension = []
     # first_input (len(first_input) == 2)
     [dimensions, no_of_pizzerias] = input().strip().split(" ")
@@ -124,13 +124,13 @@ def main():
             pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
             possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
             # Use of multithreading to go through all possible moves delivey guy can make (forward, backward, right, left) without harming core program performance
-            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "No")).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "Yes")).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "Yes")).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "No")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", True)).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", False)).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", True)).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", False)).start()
             threading.Thread(target = possible_moves.split_moves).start()
 
-            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizz_outputs, pizzeria_spec_decremented)
+            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, pizzeria_spec_decremented)
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
