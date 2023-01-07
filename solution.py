@@ -1,7 +1,7 @@
 import threading
 from time import sleep
 import numpy as np
-''' DO ERROR HANDLING, UNIT TESTS, COMMENTS '''
+'''UNIT TESTS'''
 
 '''
 The Pizzeria class does the following:
@@ -50,8 +50,7 @@ class Pizzeria:
 The PossibleMoves class does the following:
 It takes the location of a pizzeria and gets all the possible blocks a delivery guy can go to
 
-Inputs: max_delivery_range (user input that shows max distance a delivery guy can travel), fixed_start_point (user input that contains the fixed location of a pizzeria [x,y], 
-var_start_point (user input that contains the same value as fixed_start_point but will be manipulated))
+Inputs: max_delivery_range (user input that shows max distance a delivery guy can travel), fixed_start_point (user input that contains the fixed location of a pizzeria [x,y], var_start_point (user input that contains the same value as fixed_start_point but will be manipulated))
 Output: present_pizz_outputs (Contains all the possible blocks a delivey guy can go to)
 '''
 class PossibleMoves:
