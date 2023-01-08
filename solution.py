@@ -47,10 +47,13 @@ class Pizzeria:
         '''
         location_x, location_y = int(self.pizzeria_specs[0]), int(self.pizzeria_specs[1])
         self.possible_moves.append([location_x, location_y])
+        completed_moves = []
         for idx in range(len(self.possible_moves)):
             try:
-                if ((0 <= self.possible_moves[idx][0] <= self.dimensions_input - 1) and (0 <= self.possible_moves[idx][1] <= self.dimensions_input - 1)):
+                # ((0 <= self.possible_moves[idx][0] <= self.dimensions_input - 1) and (0 <= self.possible_moves[idx][1] <= self.dimensions_input - 1)):
+                if (self.possible_moves[idx] not in completed_moves) and all(0 <= int(n) <= self.dimensions_input - 1 for n in (self.possible_moves[idx][0], self.possible_moves[idx][1])):
                     self.city_dimension[self.possible_moves[idx][0]][self.possible_moves[idx][1]] += 1
+                    completed_moves.append(self.possible_moves[idx])
             except IndexError:
                 pass
         return self.city_dimension
@@ -142,6 +145,7 @@ class PossibleMoves:
                 self.var_start_point.reverse()
                 if self.var_start_point not in self.present_pizzeria_outputs:
                     self.present_pizzeria_outputs.append(list(self.var_start_point))
+                    
         self.moves_counter = 0    
         self.var_start_point= list(self.fixed_start_point)
     
@@ -153,7 +157,7 @@ def main():
     '''
     final_dimension = []
     [dimensions, no_of_pizzerias] = input().strip().split(" ")
-    if ((0 <= int(dimensions) <= 10000) and (0 <= int(no_of_pizzerias) <= 10000) and (no_of_pizzerias.isdigit() and dimensions.isdigit())):
+    if ((no_of_pizzerias.isdigit() and dimensions.isdigit()) and ((0 <= int(dimensions) <= 10000) and (0 <= int(no_of_pizzerias) <= 10000))):
         pizzeria_specs_input = []
         for idx in range (int(no_of_pizzerias)):
             [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
