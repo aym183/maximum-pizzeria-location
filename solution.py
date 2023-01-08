@@ -141,6 +141,7 @@ class PossibleMoves:
                 else:
                     self.var_start_point[0] -= 1
                 self.moves_counter += 1
+                
                 if self.var_start_point not in self.present_pizzeria_outputs:
                     self.present_pizzeria_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
@@ -163,7 +164,7 @@ def main():
         pizzeria_specs_input = []
         for idx in range (int(no_of_pizzerias)):
             [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
-            
+
             if ((all(n.isdigit() for n in (pizzeria_location_x, pizzeria_location_y, max_delivery_range)))
              and (1 <= int(max_delivery_range) <= 5000) and (all(1 <= int(n) <= int(dimensions) for n in (pizzeria_location_x, pizzeria_location_y)))):
                 pizzeria_specs_input.append([pizzeria_location_x, pizzeria_location_y, max_delivery_range])
@@ -174,13 +175,11 @@ def main():
         for idx in range(len(pizzeria_specs_input)):
             pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
             possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
-            # Use of multithreading to go through all possible moves delivery guy can make (forward, backward, right, left) without harming core program performance
             threading.Thread(target = possible_moves.straight_moves, args = ("plus", True)).start()
             threading.Thread(target = possible_moves.straight_moves, args = ("plus", False)).start()
             threading.Thread(target = possible_moves.straight_moves, args = ("subtract", True)).start()
             threading.Thread(target = possible_moves.straight_moves, args = ("subtract", False)).start()
             threading.Thread(target = possible_moves.split_moves).start()
-
             pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, pizzeria_spec_decremented)
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
