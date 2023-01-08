@@ -54,7 +54,7 @@ class Pizzeria:
             except IndexError:
                 pass
         return self.city_dimension
-
+         
     def get_max_pizzerias(self, implemented_moves: list[list[int, int]]) -> int:
         ''' Concatenates all the city dimensions for all X user inputted pizzerias
         
@@ -73,7 +73,6 @@ class Pizzeria:
                     self.max_pizzerias = output[idx][snd_idx]
         return self.max_pizzerias
 
-
 class PossibleMoves:
     ''' Object representing the simulation of all blocks a elivery guy can move to
 
@@ -91,7 +90,7 @@ class PossibleMoves:
         self.present_pizzeria_outputs = []
         self.moves_counter = 0
 
-    def straight_moves(self, type: str, split: bool) -> list[list[int, int]]:
+    def straight_moves(self, type, split):
         ''' Implements all the straight blocks a delivery guy can move to. 
 
         Args:
@@ -103,15 +102,14 @@ class PossibleMoves:
         '''
         for idx in range(1, self.max_delivery_range+1):
             if self.moves_counter != self.max_delivery_range:
-                if split == True:
+                if split == 'No':
                     self.var_start_point.reverse()
                     
                 if type == "plus":
                     self.var_start_point[0] += 1
                 elif type == 'subtract':
                     self.var_start_point[0] -= 1
-                self.moves_counter += 1
-
+                self.moves_counter+= 1
                 if self.var_start_point not in self.present_pizzeria_outputs:
                     self.present_pizzeria_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
@@ -120,9 +118,8 @@ class PossibleMoves:
        
         self.moves_counter = 0
         self.var_start_point= list(self.fixed_start_point)
-        return self.present_pizzeria_outputs
     
-    def split_moves(self) -> list[list[int, int]]:
+    def split_moves(self):
         ''' Implements the non straight blocks that a delivery guy can move to. 
         
         For example, going straight and right.
@@ -139,18 +136,15 @@ class PossibleMoves:
                     self.var_start_point[0] += 1
                 else:
                     self.var_start_point[0] -= 1
-                self.moves_counter += 1
-                
+                self.moves_counter+= 1
                 if self.var_start_point not in self.present_pizzeria_outputs:
                     self.present_pizzeria_outputs.append(list(self.var_start_point))
                 self.var_start_point.reverse()
                 if self.var_start_point not in self.present_pizzeria_outputs:
                     self.present_pizzeria_outputs.append(list(self.var_start_point))
-
         self.moves_counter = 0    
         self.var_start_point= list(self.fixed_start_point)
-        return self.present_pizzeria_outputs
-
+    
 def main():
     ''' Implements the CLI 
     
@@ -170,21 +164,21 @@ def main():
             else:
                 print("Error! Invalid input")
                 exit()
-        
+
         for idx in range(len(pizzeria_specs_input)):
-            pizzeria_spec_decremented = [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1]
-            possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), pizzeria_spec_decremented, pizzeria_spec_decremented)
-            threading.Thread(target = possible_moves.straight_moves, args = ("plus", True)).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("plus", False)).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", True)).start()
-            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", False)).start()
-            threading.Thread(target = possible_moves.split_moves).start()
-            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, pizzeria_spec_decremented)
+            possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            threading.Thread(target=possible_moves.straight_moves, args = ("plus", "No")).start()
+            threading.Thread(target=possible_moves.straight_moves, args = ("plus", "Yes")).start()
+            threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "Yes")).start()
+            threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "No")).start()
+            threading.Thread(target=possible_moves.split_moves).start()
+    
+            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
-        print(pizzeria.get_max_pizzerias(final_dimension))
-   
+        pizzeria.get_max_pizzerias(final_dimension)
+        print(pizzeria.max_pizzerias)
     else:
         print("Error! Input limit is 2 and keep within range [0, 10000]")
         exit()
