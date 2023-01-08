@@ -2,7 +2,7 @@ import threading
 import numpy as np
 
 class Pizzeria:
-    ''' Object representing creation of city dimensions and getting the final output
+    ''' Represents creation of city dimensions, implementing possible moves, and getting final output
 
     Attributes:
         dimensions_input: User input to create city NxN matrix
@@ -34,7 +34,7 @@ class Pizzeria:
         return self.city_dimension
 
     def implement_delivery_moves(self):
-        ''' Takes the possible moves a delivery guy can make from a pizzeria 
+        ''' Implements possible moves a delivery guy can make from a pizzeria 
         
         Creates the list in the PossibleMoves class as a fixed nested list and increments those 
         blocks accordingly
@@ -59,16 +59,13 @@ class Pizzeria:
     def get_max_pizzerias(self, implemented_moves):
         ''' Concatenates all the city dimensions for all X user inputted pizzerias
         
-        Adds all city dimensions together to get the max number of pizzerias that deliver 
-        pizzas to the block with the greatest selection of pizzas
-        
         Args:
             implemented_moves: contains all the transformed matrices with all
             made moves by the delivery guy from one pizzeria
 
         Returns:
-            self.max_pizzerias: Once the sum of all the matrices has been done, 
-            the max number is returned as the final output in the CLI
+            self.max_pizzerias: The max number of pizzerias that deliver 
+            pizzas to the block with the greatest selection of pizzas
         '''
         output = np.array(implemented_moves).sum(0).tolist()
         for idx in range(len(output)):
@@ -166,7 +163,9 @@ def main():
         pizzeria_specs_input = []
         for idx in range (int(no_of_pizzerias)):
             [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
-            if (all(n.isdigit() for n in (pizzeria_location_x, pizzeria_location_y, max_delivery_range))) and (1 <= int(max_delivery_range) <= 5000) and (all(1 <= int(n) <= int(dimensions) for n in (pizzeria_location_x, pizzeria_location_y))):
+            
+            if ((all(n.isdigit() for n in (pizzeria_location_x, pizzeria_location_y, max_delivery_range)))
+             and (1 <= int(max_delivery_range) <= 5000) and (all(1 <= int(n) <= int(dimensions) for n in (pizzeria_location_x, pizzeria_location_y)))):
                 pizzeria_specs_input.append([pizzeria_location_x, pizzeria_location_y, max_delivery_range])
             else:
                 print("Error! Invalid input")
