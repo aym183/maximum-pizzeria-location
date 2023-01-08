@@ -90,7 +90,7 @@ class PossibleMoves:
         self.present_pizzeria_outputs = []
         self.moves_counter = 0
 
-    def straight_moves(self, type, split):
+    def straight_moves(self, type: str, split: str):
         ''' Implements all the straight blocks a delivery guy can move to. 
 
         Args:
@@ -168,17 +168,17 @@ def main():
         for idx in range(len(pizzeria_specs_input)):
             possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, 
             int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
-            threading.Thread(target=possible_moves.straight_moves, args = ("plus", "No")).start()
-            threading.Thread(target=possible_moves.straight_moves, args = ("plus", "Yes")).start()
-            threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "Yes")).start()
-            threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "No")).start()
-            threading.Thread(target=possible_moves.split_moves).start()
-    
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "No")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("plus", "Yes")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "Yes")).start()
+            threading.Thread(target = possible_moves.straight_moves, args = ("subtract", "No")).start()
+            threading.Thread(target = possible_moves.split_moves).start()
             pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, 
             [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
+    
         pizzeria.get_max_pizzerias(final_dimension)
         print(pizzeria.max_pizzerias)
     else:
