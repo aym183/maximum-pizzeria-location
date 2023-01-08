@@ -20,8 +20,7 @@ class Pizzeria:
         self.max_pizzerias = 0
 
     def set_city_dimensions(self):
-        ''' 
-        Sets city dimensions matrix based on user input
+        ''' Sets city dimensions matrix based on user input
 
         Args:
             None
@@ -35,9 +34,9 @@ class Pizzeria:
         return self.city_dimension
 
     def implement_delivery_moves(self):
-        ''' 
-        Takes the possible moves a delivery guy can make from a pizzeria created
-        in the PossibleMoves class as a fixed nested list and increments those 
+        ''' Takes the possible moves a delivery guy can make from a pizzeria 
+        
+        Creates the list in the PossibleMoves class as a fixed nested list and increments those 
         blocks accordingly
         
         Args:
@@ -58,9 +57,9 @@ class Pizzeria:
         return self.city_dimension
 
     def get_max_pizzerias(self, implemented_moves):
-        ''' 
-        Takes the transformed city dimensions for all X user inputted pizzerias
-        and adds it all together to get the max number of pizzerias that deliver 
+        ''' Concatenates all the city dimensions for all X user inputted pizzerias
+        
+        Adds all city dimensions together to get the max number of pizzerias that deliver 
         pizzas to the block with the greatest selection of pizzas
         
         Args:
@@ -97,8 +96,7 @@ class PossibleMoves:
         self.moves_counter = 0
 
     def straight_moves(self, type, split):
-        ''' 
-        Implements all the straight blocks a delivery guy can move to. 
+        ''' Implements all the straight blocks a delivery guy can move to. 
 
         Args:
             type: Indicates whether delivery guy should go forwards or backwards
@@ -129,8 +127,8 @@ class PossibleMoves:
         return self.present_pizzeria_outputs
     
     def split_moves(self):
-        ''' 
-        Implements the non straight blocks that a delivery guy can move to.
+        ''' Implements the non straight blocks that a delivery guy can move to. 
+        
         For example, going straight and right.
 
         Args:
@@ -157,9 +155,10 @@ class PossibleMoves:
         return self.present_pizzeria_outputs
 
 def main():
-    ''' 
-        Implements the CLI tht takes the user inputs, creates objects that 
-        does the transformations and prints the final output
+    ''' Implements the CLI 
+    
+    Takes the user inputs, creates objects that does the transformations and 
+    prints the final output
     '''
     final_dimension = []
     [dimensions, no_of_pizzerias] = input().strip().split(" ")
