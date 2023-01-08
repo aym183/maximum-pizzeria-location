@@ -166,14 +166,16 @@ def main():
                 exit()
 
         for idx in range(len(pizzeria_specs_input)):
-            possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, 
+            int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
             threading.Thread(target=possible_moves.straight_moves, args = ("plus", "No")).start()
             threading.Thread(target=possible_moves.straight_moves, args = ("plus", "Yes")).start()
             threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "Yes")).start()
             threading.Thread(target=possible_moves.straight_moves, args = ("subtract", "No")).start()
             threading.Thread(target=possible_moves.split_moves).start()
     
-            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
+            pizzeria = Pizzeria(int(dimensions), possible_moves.present_pizzeria_outputs, 
+            [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
