@@ -191,6 +191,7 @@ def main():
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
+            
             print(pizzeria.city_dimension)
     
         pizzeria.get_max_pizzerias(final_dimension)
