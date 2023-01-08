@@ -1,6 +1,5 @@
 import threading
 import numpy as np
-
 class Pizzeria:
     ''' Represents creation of city dimensions, implementing possible moves, and getting final output
 
@@ -19,7 +18,7 @@ class Pizzeria:
         self.city_dimension = []
         self.max_pizzerias = 0
 
-    def set_city_dimensions(self):
+    def set_city_dimensions(self) -> list[list[int,int]]:
         ''' Sets city dimensions matrix based on user input
 
         Args:
@@ -33,7 +32,7 @@ class Pizzeria:
             self.city_dimension.append(list(sub_dimension))
         return self.city_dimension
 
-    def implement_delivery_moves(self):
+    def implement_delivery_moves(self) -> list[list[int,int]]:
         ''' Implements possible moves a delivery guy can make from a pizzeria 
         
         Creates the list in the PossibleMoves class as a fixed nested list and increments those 
@@ -56,7 +55,7 @@ class Pizzeria:
                 pass
         return self.city_dimension
 
-    def get_max_pizzerias(self, implemented_moves):
+    def get_max_pizzerias(self, implemented_moves: list[list[int,int]]) -> int:
         ''' Concatenates all the city dimensions for all X user inputted pizzerias
         
         Args:
@@ -85,14 +84,14 @@ class PossibleMoves:
         present_pizzeria_outputs: Contains all the possible blocks a delivey guy can go to
         moves_counter: Counter that ensures that all moves are within the max_delivery_range
     '''
-    def __init__(self, max_delivery_range, fixed_start_point, var_start_point):
+    def __init__(self, max_delivery_range: int, fixed_start_point: list[int, int], var_start_point: list[int, int]):
         self.max_delivery_range = max_delivery_range
         self.fixed_start_point = fixed_start_point
         self.var_start_point = var_start_point
         self.present_pizzeria_outputs = []
         self.moves_counter = 0
 
-    def straight_moves(self, type, split):
+    def straight_moves(self, type: str, split: bool) -> list[list[int,int]]:
         ''' Implements all the straight blocks a delivery guy can move to. 
 
         Args:
@@ -123,7 +122,7 @@ class PossibleMoves:
         self.var_start_point= list(self.fixed_start_point)
         return self.present_pizzeria_outputs
     
-    def split_moves(self):
+    def split_moves(self) -> list[list[int,int]]:
         ''' Implements the non straight blocks that a delivery guy can move to. 
         
         For example, going straight and right.
