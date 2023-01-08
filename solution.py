@@ -149,7 +149,7 @@ class PossibleMoves:
                     
         self.moves_counter = 0    
         self.var_start_point= list(self.fixed_start_point)
-    
+  
 def main():
     ''' Implements the CLI 
     
@@ -157,11 +157,19 @@ def main():
     prints the final output
     '''
     final_dimension = []
-    [dimensions, no_of_pizzerias] = input().strip().split(" ")
+    try:
+        [dimensions, no_of_pizzerias] = input().strip().split(" ")
+    except:
+        print("Please enter only 2 inputs with a space!")
+        exit()
     if ((no_of_pizzerias.isdigit() and dimensions.isdigit()) and ((0 <= int(dimensions) <= 10000) and (0 <= int(no_of_pizzerias) <= 10000))):
         pizzeria_specs_input = []
         for idx in range (int(no_of_pizzerias)):
-            [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
+            try:
+                [pizzeria_location_x, pizzeria_location_y, max_delivery_range] = input().strip().split(" ")
+            except:
+                print("Please enter only 3 inputs with a space!")
+                exit()
 
             if ((all(n.isdigit() for n in (pizzeria_location_x, pizzeria_location_y, max_delivery_range)))
                 and (1 <= int(max_delivery_range) <= 5000) and (all(1 <= int(n) <= int(dimensions) for n in (pizzeria_location_x, pizzeria_location_y)))):
@@ -169,7 +177,7 @@ def main():
             else:
                 print("Error! Invalid input")
                 exit()
-
+        
         for idx in range(len(pizzeria_specs_input)):
             possible_moves = PossibleMoves(int(pizzeria_specs_input[idx][2]), [int(pizzeria_specs_input[idx][0]) - 1, 
             int(pizzeria_specs_input[idx][1]) - 1], [int(pizzeria_specs_input[idx][0]) - 1, int(pizzeria_specs_input[idx][1]) - 1])
@@ -183,6 +191,7 @@ def main():
             pizzeria.set_city_dimensions()
             pizzeria.implement_delivery_moves()
             final_dimension.append(list(pizzeria.city_dimension))
+            print(pizzeria.city_dimension)
     
         pizzeria.get_max_pizzerias(final_dimension)
         print(pizzeria.max_pizzerias)
