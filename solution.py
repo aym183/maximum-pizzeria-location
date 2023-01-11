@@ -50,7 +50,6 @@ class Pizzeria:
         completed_moves = []
         for idx in range(len(self.possible_moves)):
             try:
-                # ((0 <= self.possible_moves[idx][0] <= self.dimensions_input - 1) and (0 <= self.possible_moves[idx][1] <= self.dimensions_input - 1)):
                 if ((self.possible_moves[idx] not in completed_moves) and 
                     all(0 <= int(n) <= self.dimensions_input - 1 for n in (self.possible_moves[idx][0], self.possible_moves[idx][1]))):
                     self.city_dimension[self.possible_moves[idx][0]][self.possible_moves[idx][1]] += 1
